@@ -194,7 +194,7 @@ For cluster set up, we do the same thing, but we set up ResourceManager and Name
  ```
 12. Or run an interactive shell as following:  
  ```
- $ ./bin/spark-shell --master yarn-cluster
+ $ ./bin/spark-shell --master yarn-client
  ```
         
         
