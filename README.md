@@ -1,4 +1,4 @@
-# Spark 1.5.0 & GraphX install
+# Spark 1.5.0 & GraphX & Hadoop 2.7.1 install
 
 1. Create VM with 2 CPU & 8GB memory with debian 7 wheezy.
 2. (Optional) Install prerequisite binaries:
@@ -167,22 +167,34 @@ For cluster set up, we do the same thing, but we set up ResourceManager and Name
         </configuration>
         ```
 
+10. Download Spark 1.5.0 and install (Choose 'Pre-built for Hadoop 2.6 and later' option).
+ 
+ ```
+ $ cd ~/
+ $ wget http://apache.mirrors.ionfish.org/spark/spark-1.5.0/spark-1.5.0-bin-hadoop2.6.tgz
+ $ tar -xzf spark-1.5.0-bin-hadoop2.6.tgz
+ $ cd spark-1.5.0-bin-hadoop2.6
+ $ cp conf/spark-env.sh.template conf/spark-env.sh
+ ```
 
-6. Download Spark 1.5.0 and install (Choose 'Pre-built for Hadoop 2.6 and later' option).
-    * `$ cd ~/`
-    * `$ wget http://apache.mirrors.ionfish.org/spark/spark-1.5.0/spark-1.5.0-bin-hadoop2.6.tgz`
-    * `$ tar -xzf spark-1.5.0-bin-hadoop2.6.tgz`
-    * `$ cd spark-1.5.0-bin-hadoop2.6`
-    * `$ cp conf/spark-env.sh.template conf/spark-env.sh`
-    * `$ emacs conf/spark-env.sh`
-        * Append `export SPARK_DIST_CLASSPATH=$(/path/to/hadoop/bin/hadoop classpath)`.  
-            Note that you should change `/path/to/hadoop/` to your home directory path followed by `hadoop-2.7.1`.
-7. Try to run a sample job.
-    * `$ ./bin/run-example SparkPi 10`
-    * This should give you the estimation of Pi like following:  
-        `15/09/15 04:41:18 INFO scheduler.DAGScheduler: Job 0 finished: reduce at SparkPi.scala:36, took 2.189995 s
-Pi is roughly 3.140676`
-8. Or run an interactive shell as following:
-    * `$ ./bin/spark-shell --master local[2]`
+ * Update `$ emacs conf/spark-env.sh` by appending:  
+ `export SPARK_DIST_CLASSPATH=$(/path/to/hadoop/bin/hadoop classpath)`
+  * Note that you should change `/path/to/hadoop/` to your home directory path followed by `hadoop-2.7.1`.
+
+11. Try to run a sample job using YARN cluster mode.  
+ ```
+ ./bin/spark-submit --class org.apache.spark.examples.SparkPi \
+    --master yarn-cluster \
+    --num-executors 2 \
+    --driver-memory 1g \
+    --executor-memory 1g \
+    --executor-cores 1 \
+    lib/spark-examples*.jar \
+    10
+ ```
+12. Or run an interactive shell as following:  
+ ```
+ $ ./bin/spark-shell --master yarn-cluster
+ ```
         
         
