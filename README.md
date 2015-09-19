@@ -167,6 +167,41 @@ For cluster set up, we do the same thing, but we set up ResourceManager and Name
         </configuration>
         ```
 
+10. Automatic deployment script setup
+ * In order to conveniently deploy HDFS and YARN, we can use `sbin/start-dfs.sh` and `sbin/start-yarn.sh` scripts.
+ * But before that, we need to set `$HADOOP_PREFIX/etc/hadoop/slaves` files as following:  
+ 
+  ```
+  test-01
+  instance-1
+  instance-2
+  ```
+  
+ * Also, we need to set `JAVA_HOME` correctly to `libexec/hadoop-config.sh` file as following (hadoop is unable to retrieve environment variables from `~./bashrc`):
+ 
+  ```
+  # Newer versions of glibc use an arena memory allocator that causes virtual                                        
+  # memory usage to explode. This interacts badly with the many threads that                                         
+  # we use in Hadoop. Tune the variable down to prevent vmem explosion.                                              
+  export MALLOC_ARENA_MAX=${MALLOC_ARENA_MAX:-4}
+  
+  # Add this line here
+  export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64/jre
+  
+  # Attempt to set JAVA_HOME if it is not set                                                                        
+  if [[ -z $JAVA_HOME ]]; then
+  ```
+  
+ * Then, we can start and stop HDFS and YARN as following:
+ 
+  ```
+  $ $HADOOP_PREFIX/sbin/start-dfs.sh
+  $ $HADOOP_PREFIX/sbin/start-yarn.sh
+  
+  $ $HADOOP_PREFIX/sbin/stop-yarn.sh
+  $ $HADOOP_PREFIX/sbin/stop-dfs.sh
+  ```
+
 10. Download Spark 1.5.0 and install (Choose 'Pre-built for Hadoop 2.6 and later' option).
  
  ```
