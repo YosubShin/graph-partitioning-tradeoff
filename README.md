@@ -228,8 +228,31 @@ For cluster set up, we do the same thing, but we set up ResourceManager and Name
     10
  ```
 12. Or run an interactive shell as following:  
+
  ```
  $ ./bin/spark-shell --master yarn-client
  ```
-        
-        
+13. In order to run Spark without YARN and in the Standalone mode:
+ * install spark binary to all of the machines.
+ * In the master node, add `conf/slaves` file and add all hosts that will spawn a worker:  
+
+  ```
+  test-01
+  instance-1
+  instance-2
+  ```
+  * In order for this to work, one has to enable passwordless SSH by adding public/private keys and add the public key to `~/.ssh/authorized_keys` of all hosts.
+ * In the master node, run `$ ./sbin/start-all.sh`.
+ 
+14. Try to run a sample job under Standalone cluster mode:  
+
+ ```
+ ./bin/spark-submit --class org.apache.spark.examples.SparkPi \
+  --master spark://test-01:7077 \
+  --num-executors 4 \
+  --driver-memory 1g \
+  --executor-memory 1g \
+  --executor-cores 1 \
+  lib/spark-examples*.jar \
+  10
+ ```
