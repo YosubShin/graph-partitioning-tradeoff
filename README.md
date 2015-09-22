@@ -76,6 +76,7 @@
         * For deploying a cluster with more than just a single machine, make sure to look at 'Cluster Installation' section and follow the direction there.
         
 6. Configure YARN.
+    * You can skip this section if you'll run Spark on Standalone Cluster mode.
     * Update `etc/hadoop/yarn-site.xml` as following:
     
         ```
