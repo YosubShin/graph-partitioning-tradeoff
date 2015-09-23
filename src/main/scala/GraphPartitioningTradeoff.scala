@@ -13,12 +13,17 @@ object GraphPartitioningTradeoff {
     val outputCSVWriter = new CSVWriter(outputCSVBufferedWriter)
 
     val graphFilePath: String = sys.env("GRAPH_FILE_PATH")
-    val numIterations: Int = 1
-
+    val numIterationsList = List(1, 5, 10)
     val partitionStrategies = List(None, Some(PartitionStrategy.RandomVertexCut), Some(PartitionStrategy.EdgePartition1D), Some(PartitionStrategy.EdgePartition2D))
 
-    val outputCSVRowList = partitionStrategies.map(partitionStrategy => runGraphAlgorithm(partitionStrategy, graphFilePath, numIterations))
-    val schemaArray = Array("partitioning_strategy", "loading_time", "partitioning_time", "computation_time")
+    var outputCSVRowList: List[Array[String]] = List()
+    for (partitionStrategy <- partitionStrategies) {
+      for (numIterations <- numIterationsList) {
+        outputCSVRowList ::= runGraphAlgorithm(partitionStrategy, graphFilePath, numIterations)
+      }
+    }
+
+    val schemaArray = Array("partitioning_strategy", "num_iterations", "loading_time", "partitioning_time", "computation_time")
 
     outputCSVWriter.writeAll((List(schemaArray) ++ outputCSVRowList).asJava)
     outputCSVBufferedWriter.close()
