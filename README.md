@@ -1,12 +1,22 @@
 # Spark 1.5.0 & GraphX & Hadoop 2.7.1 install
 
 1. Create VM with 2 CPU & 8GB memory with debian 7 wheezy.
-2. (Optional) Install prerequisite binaries:
-  * Install Emacs  
+2. Install prerequisite binaries:
+  * (Optional) Install Emacs  
       `$ sudo apt-get install emacs`
-  * Install Byobu  
+  * (Optional) Install Byobu  
       `$ sudo apt-get install byobu`
       * Attach to byobu session: `$ byobu`
+  * Install Git  
+   `$ sudo apt-get install git`
+  * Install sbt  
+  
+   ```
+   $ sudo apt-get install apt-transport-https
+   $ echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+   $ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
+   $ sudo apt-get update
+   $ sudo apt-get install sbt
 2. Install Java 7 (OpenJDK is fine.):
   `$ sudo apt-get install openjdk-7-jre`
 3. Export `JAVA_HOME` to environment. Append following in `~/.bashrc` file:  
@@ -76,6 +86,7 @@
         * For deploying a cluster with more than just a single machine, make sure to look at 'Cluster Installation' section and follow the direction there.
         
 6. Configure YARN.
+    * You can skip this section if you'll run Spark on Standalone Cluster mode.
     * Update `etc/hadoop/yarn-site.xml` as following:
     
         ```
