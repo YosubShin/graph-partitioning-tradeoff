@@ -36,6 +36,7 @@
   res1: Long = 1233069
   scala> graph.edges.count
   res2: Long = 4312111
+  ```
   
 # Install SBT and Run Spark thorugh `spark-submit`
 
