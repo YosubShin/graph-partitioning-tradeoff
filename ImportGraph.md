@@ -9,15 +9,18 @@
   `$ gsutil cp gs://graph-data/lab_data_lj ~/`
 
 3. Create a new directory in HDFS:  
-  `$ $HADOOP_PREFIX/bin/hadoop fs -mkdir graph-data`
+  `$ $HADOOP_PREFIX/bin/hadoop fs -mkdir /graph-data`
   
 4. Put local graph files into HDFS:
-  `$ $HADOOP_PREFIX/bin/hadoop fs -put lab_data_lj graph-data`
+  `$ $HADOOP_PREFIX/bin/hadoop fs -put lab_data_lj /graph-data`
   * Make sure files are placed correctly with:
-    `$ $HADOOP_PREFIX/bin/hadoop fs -ls graph-data/lab_data_lj`
+    `$ $HADOOP_PREFIX/bin/hadoop fs -ls /graph-data/lab_data_lj`
 
 5. Start Spark shell.
-  `$ $SPARK_HOME/bin/spark-shell --master yarn-client`
+  * If in YARN mode:  
+    `$ $SPARK_HOME/bin/spark-shell --master yarn-client`
+  * If in Standalone cluster mode:    
+    `$ $SPARK_HOME/bin/spark-shell --master spark://hostname:7077`
   
 6. Import graph files from HDFS:
 
@@ -26,7 +29,7 @@
   import org.apache.spark.graphx._
   import org.apache.spark.rdd.RDD
   
-  val graph = GraphLoader.edgeListFile(sc, "hdfs://test-01/user/yosub_shin_0/graph-data/lab_data_lj")
+  val graph = GraphLoader.edgeListFile(sc, "hdfs://hostname/graph-data/lab_data_lj")
   ```
   
 7. Now we can do following:
