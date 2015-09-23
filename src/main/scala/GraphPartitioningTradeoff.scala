@@ -57,6 +57,6 @@ object GraphPartitioningTradeoff {
 
     println(s"Total time: ${graphComputationDoneTimestamp - initialTimestamp}")
     sc.stop()
-    Array(partitionStrategy.getOrElse("None").toString, graphLoadingTime.toString, graphPartitioningTime.toString, graphComputationTime.toString)
+    Array(partitionStrategy.getOrElse("None").toString, numIterations, graphLoadingTime.toString, graphPartitioningTime.toString, graphComputationTime.toString)
   }
 }
