@@ -37,3 +37,14 @@
   scala> graph.edges.count
   res2: Long = 4312111
   
+# Install SBT and Run Spark thorugh `spark-submit`
+
+1. Install sbt (http://www.scala-sbt.org/0.13/tutorial/Installing-sbt-on-Linux.html)  
+  
+  ```
+  echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
+  sudo apt-get update
+  sudo apt-get install sbt
+  ```
+
