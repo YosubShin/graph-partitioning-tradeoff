@@ -17,6 +17,8 @@
    $ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
    $ sudo apt-get update
    $ sudo apt-get install sbt
+   ```
+   
 2. Install Java 7 (OpenJDK is fine.):
   `$ sudo apt-get install openjdk-7-jre`
 3. Export `JAVA_HOME` to environment. Append following in `~/.bashrc` file:  
@@ -224,7 +226,11 @@ For cluster set up, we do the same thing, but we set up ResourceManager and Name
  ```
 
  * Update `$ emacs conf/spark-env.sh` by appending:  
- `export SPARK_DIST_CLASSPATH=$(/path/to/hadoop/bin/hadoop classpath)`
+
+ ```
+ export SPARK_DIST_CLASSPATH=$(/path/to/hadoop/bin/hadoop classpath)
+ export SPARK_PUBLIC_DNS=$(curl http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip -H "Metadata-Flavor: Google")
+ ```
   * Note that you should change `/path/to/hadoop/` to your home directory path followed by `hadoop-2.7.1`.
 
 11. Try to run a sample job using YARN cluster mode.  
