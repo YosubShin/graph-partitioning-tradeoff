@@ -50,7 +50,8 @@ object GraphPartitioningTradeoff {
     println(s"Graph partitioning time: $graphPartitioningTime")
 
     // Run graph algorithm
-    PageRank.run(graph, numIterations)
+//    PageRank.run(graph, numIterations)
+    ShortestPaths.run(graph, graph.vertices.takeSample(true, numIterations).map(v => v._1))
     val graphComputationDoneTimestamp: Long = System.currentTimeMillis
     val graphComputationTime: Long = graphComputationDoneTimestamp - graphPartitioningDoneTimestamp
     println(s"Graph computation time: $graphComputationTime")
