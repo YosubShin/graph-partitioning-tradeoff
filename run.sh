@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TIME=`date +%Y-%m-%d.%H:%M:%S`
-HOSTNAME=$(curl http://metadata/computeMetadata/v1/instance/hostname -H "Metadata-Flavor: Google")
+HOSTNAME=$(hostname)
 export OUTPUT_CSV_PATH=/home/yosub_shin_0/graph-partitioning-tradeoff-${TIME}.csv
 export GRAPH_FILE_PATH=hdfs://${HOSTNAME}/graph-data/lab_data_lj
 

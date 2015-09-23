@@ -38,6 +38,7 @@ object GraphPartitioningTradeoff {
 
     if (partitionStrategy.isDefined) {
       graph = graph.partitionBy(partitionStrategy.get)
+      graph.edges.foreachPartition(x => {})
     }
     val graphPartitioningDoneTimestamp: Long = System.currentTimeMillis
     val graphPartitioningTime: Long = graphPartitioningDoneTimestamp - graphLoadedTimestamp
@@ -51,6 +52,6 @@ object GraphPartitioningTradeoff {
 
     println(s"Total time: ${graphComputationDoneTimestamp - initialTimestamp}")
     sc.stop()
-    Array(partitionStrategy.toString, graphLoadingTime.toString, graphPartitioningTime.toString, graphComputationTime.toString)
+    Array(partitionStrategy.getOrElse("None").toString, graphLoadingTime.toString, graphPartitioningTime.toString, graphComputationTime.toString)
   }
 }
