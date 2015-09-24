@@ -13,20 +13,21 @@ object GraphPartitioningTradeoff {
     val outputCSVWriter = new CSVWriter(outputCSVBufferedWriter)
 
     val graphFilePath: String = sys.env("GRAPH_FILE_PATH")
-    val numIterationsList = List(1, 5, 10)
+    val numIterationsList = List(1, 5)
     val partitionStrategies = List(None, Some(PartitionStrategy.RandomVertexCut), Some(PartitionStrategy.EdgePartition1D), Some(PartitionStrategy.EdgePartition2D))
 
-    var outputCSVRowList: List[Array[String]] = List()
-    for (partitionStrategy <- partitionStrategies) {
-      for (numIterations <- numIterationsList) {
-        outputCSVRowList ::= runGraphAlgorithm(partitionStrategy, graphFilePath, numIterations)
-      }
-    }
-
     val schemaArray = Array("partitioning_strategy", "num_iterations", "loading_time", "partitioning_time", "computation_time")
-
-    outputCSVWriter.writeAll((List(schemaArray) ++ outputCSVRowList).asJava)
-    outputCSVBufferedWriter.close()
+    var outputCSVRowList: List[Array[String]] = List()
+    try {
+      for (partitionStrategy <- partitionStrategies) {
+        for (numIterations <- numIterationsList) {
+          outputCSVRowList ::= runGraphAlgorithm(partitionStrategy, graphFilePath, numIterations)
+        }
+      }
+    } finally {
+      outputCSVWriter.writeAll((List(schemaArray) ++ outputCSVRowList).asJava)
+      outputCSVBufferedWriter.close()
+    }
   }
 
   def runGraphAlgorithm(partitionStrategy: Option[PartitionStrategy], graphFilePath: String, numIterations: Int): Array[String] = {
