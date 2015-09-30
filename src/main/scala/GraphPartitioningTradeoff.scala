@@ -13,7 +13,7 @@ object GraphPartitioningTradeoff {
     val outputCSVWriter = new CSVWriter(outputCSVBufferedWriter)
 
     val graphFilePath: String = sys.env("GRAPH_FILE_PATH")
-    val numIterationsList = List(1, 5)
+    val numIterationsList = List(1, 5, 10)
     val partitionStrategies = List(None, Some(PartitionStrategy.RandomVertexCut), Some(PartitionStrategy.EdgePartition1D), Some(PartitionStrategy.EdgePartition2D))
     val algorithms = List("PageRank", "ShortestPaths")
 
