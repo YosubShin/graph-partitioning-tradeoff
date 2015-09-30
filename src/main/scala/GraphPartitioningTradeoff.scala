@@ -61,7 +61,7 @@ object GraphPartitioningTradeoff {
     } else if (algorithm.equals("ShortestPaths")) {
       ShortestPaths.run(graph, graph.vertices.takeSample(true, numIterations).map(v => v._1))
     } else {
-      throw IllegalArgumentException
+      throw new IllegalArgumentException(s"Invalid algorithm is selected: $algorithm")
     }
     val graphComputationDoneTimestamp: Long = System.currentTimeMillis
     val graphComputationTime: Long = graphComputationDoneTimestamp - graphPartitioningDoneTimestamp
