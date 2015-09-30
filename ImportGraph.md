@@ -52,3 +52,7 @@
   sudo apt-get install sbt
   ```
 
+2. Build Spark application with `sbt package`.
+
+3. Run `spark-submit` application with parameters.  
+  In this case, run `run.sh`.
