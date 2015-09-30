@@ -15,13 +15,18 @@ object GraphPartitioningTradeoff {
     val graphFilePath: String = sys.env("GRAPH_FILE_PATH")
     val numIterationsList = List(1, 5)
     val partitionStrategies = List(None, Some(PartitionStrategy.RandomVertexCut), Some(PartitionStrategy.EdgePartition1D), Some(PartitionStrategy.EdgePartition2D))
+    val algorithms = List("PageRank", "ShortestPaths")
 
-    val schemaArray = Array("partitioning_strategy", "num_iterations", "loading_time", "partitioning_time", "computation_time")
+    val schemaArray = Array("algorithm", "partitioning_strategy", "num_iterations", "loading_time", "partitioning_time", "computation_time", "total_time")
     var outputCSVRowList: List[Array[String]] = List()
     try {
-      for (partitionStrategy <- partitionStrategies) {
-        for (numIterations <- numIterationsList) {
-          outputCSVRowList ::= runGraphAlgorithm(partitionStrategy, graphFilePath, numIterations)
+      for (run <- (0 to 2).toList) {
+        for (algorithm <- algorithms) {
+          for (partitionStrategy <- partitionStrategies) {
+            for (numIterations <- numIterationsList) {
+              outputCSVRowList ::= runGraphAlgorithm(algorithm, partitionStrategy, graphFilePath, numIterations)
+            }
+          }
         }
       }
     } finally {
@@ -30,8 +35,8 @@ object GraphPartitioningTradeoff {
     }
   }
 
-  def runGraphAlgorithm(partitionStrategy: Option[PartitionStrategy], graphFilePath: String, numIterations: Int): Array[String] = {
-    println(s"Running Graph Algorithm with Partitioning Strategy: ${partitionStrategy.toString}, for graph: $graphFilePath, with numIterations: $numIterations")
+  def runGraphAlgorithm(algorithm: String, partitionStrategy: Option[PartitionStrategy], graphFilePath: String, numIterations: Int): Array[String] = {
+    println(s"Running Graph Algorithm $algorithm with Partitioning Strategy: ${partitionStrategy.toString}, for graph: $graphFilePath, with numIterations: $numIterations")
     val conf = new SparkConf().setAppName("Graph Partitioning Tradeoff")
     val sc = new SparkContext(conf)
     val initialTimestamp: Long = System.currentTimeMillis
@@ -51,14 +56,27 @@ object GraphPartitioningTradeoff {
     println(s"Graph partitioning time: $graphPartitioningTime")
 
     // Run graph algorithm
-//    PageRank.run(graph, numIterations)
-    ShortestPaths.run(graph, graph.vertices.takeSample(true, numIterations).map(v => v._1))
+    if (algorithm.equals("PageRank")) {
+      PageRank.run(graph, numIterations)
+    } else if (algorithm.equals("ShortestPaths")) {
+      ShortestPaths.run(graph, graph.vertices.takeSample(true, numIterations).map(v => v._1))
+    } else {
+      throw IllegalArgumentException
+    }
     val graphComputationDoneTimestamp: Long = System.currentTimeMillis
     val graphComputationTime: Long = graphComputationDoneTimestamp - graphPartitioningDoneTimestamp
     println(s"Graph computation time: $graphComputationTime")
 
-    println(s"Total time: ${graphComputationDoneTimestamp - initialTimestamp}")
+    val totalTime: Long = graphComputationDoneTimestamp - initialTimestamp
+    println(s"Total time: $totalTime")
     sc.stop()
-    Array(partitionStrategy.getOrElse("None").toString, numIterations.toString, graphLoadingTime.toString, graphPartitioningTime.toString, graphComputationTime.toString)
+    Array(
+      algorithm,
+      partitionStrategy.getOrElse("None").toString,
+      numIterations.toString,
+      graphLoadingTime.toString,
+      graphPartitioningTime.toString,
+      graphComputationTime.toString,
+      totalTime.toString)
   }
 }
