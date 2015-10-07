@@ -3,7 +3,8 @@
 0. Install prerequisite binaries
 
   ```
-  sudo apt-get install -y cmake build-essential zlib1g zlib1g-dev libgomp1
+  sudo apt-get update
+  sudo apt-get install -y gcc g++ cmake build-essential zlib1g zlib1g-dev libgomp1 openmpi-bin openmpi-doc libopenmpi-dev default-jdk
   ```
 
 0. Download PowerGraph from its Git repository. 
