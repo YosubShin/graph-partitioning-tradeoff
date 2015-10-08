@@ -17,7 +17,7 @@
 
   ```
   cd PowerGraph
-  ./configure --no_mpi
+  ./configure
   cd release/toolkits/graph_analytics
   make pagerank -j30
   ```
